@@ -5,6 +5,7 @@
 package tests
 package codec
 import skunk.codec.all._
+import skunk.Arr
 
 /** Test that we can round=trip values via codecs. */
 case object NumericCodecTest extends CodecTest {
@@ -28,6 +29,10 @@ case object NumericCodecTest extends CodecTest {
   roundtripTest(float4)(Float.NegativeInfinity, -1, 0, 1, Float.PositiveInfinity)
   roundtripWithSpecialValueTest("NaN", float4)(Float.NaN, _.isNaN)
   decodeFailureTest(float4, List("x"))
+
+  val arr1 = Arr.fromFoldable(List(1,2,3,4,5,6,7,8))
+  val Some(arr2) = arr1.reshape(2,1,4)
+  roundtripTest(_int4)(Arr.empty, arr1, arr2)
 
 }
 
